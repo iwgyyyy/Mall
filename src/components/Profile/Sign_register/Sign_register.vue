@@ -2,26 +2,25 @@
   <div class="sr-div" v-show='change'>
     <div class="sr-div-child">
       <!-- 登录div -->
-      <Sign 
-      @sign='determine' 
+      <Signin 
       @cancelSign='cancel' 
       @signToRegister="showRegisterForm"
       ref='sign'>
-      </Sign>
+      </Signin>
       <!-- 注册按钮 -->
-      <Register
+      <Registeruser
       @registerToSign="showSignForm"
       ref='register'>
-      </Register>
+      </Registeruser>
     </div>
   </div>
 </template>
 
 <script>
 // 必须要加{}才能导入element ui组件
-import Sign from './Sign'
-import Register from './Register'
-import  {ElMessage}  from 'element-plus'
+import Signin from './Sign'
+import Registeruser from './Register'
+
 export default {
   name: "Sign_register",
   created() {},
@@ -36,23 +35,6 @@ export default {
     cancel(){
       this.change=false
     },
-    // 登录界面的确定按钮
-    determine(account,password){
-      if(account='jc' && password=='11'){
-        this.change=false
-        this.$store.commit('changeStatetoFalse')
-        ElMessage.success({
-          message:'登录成功',
-          type:'success'
-        })
-      }else{
-        ElMessage.error({
-          message:'账号或密码错误',
-          type:'error'
-        })
-      }
-      
-    },
     // 切换登录和注册界面
     showRegisterForm(){
       this.$refs.register.register_flag=true
@@ -62,8 +44,8 @@ export default {
     }
   },
   components:{
-    Sign,
-    Register
+    Signin,
+    Registeruser
   }
 };
 </script>

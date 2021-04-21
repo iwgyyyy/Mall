@@ -22,6 +22,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
   name: "Sign",
   created() {},
@@ -34,9 +35,20 @@ export default {
   methods: {
     // 确定按钮
     signDetermine(){
-      this.$emit('sign',this.account,this.password)
-      this.account='',
-      this.password=''
+      new Promise((resolve,reject)=>{
+        axios({
+          method:'post',
+          baseURL:'http://localhost:3000',
+          url: '/user',
+          data:{'account':this.account,"password":this.password}
+        }).then(res=>{
+          console.log(res.data);
+          resolve(res.data)
+        }).catch(error=>{
+          console.log(error);
+          reject(error)
+        })
+      })
     },
     // 取消按钮
     signCancel(){

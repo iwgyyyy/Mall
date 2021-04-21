@@ -17,7 +17,7 @@
       <input type="tel" v-model="phonenumber" placeholder="请输入手机号" required/>
     </div>
     <div class="flex-center">
-      <el-button type="primary">确认注册</el-button>
+      <el-button type="primary" @click="confirmRegister">确认注册</el-button>
       <el-button type="info" @click="toSign">返回</el-button>
     </div>
   </div>
@@ -42,7 +42,8 @@ export default {
     toSign(){
       this.$emit('registerToSign')
       this.register_flag=false
-    }
+    },
+    // 
   },
 };
 </script>
