@@ -35,20 +35,16 @@ export default {
   methods: {
     // 确定按钮
     signDetermine(){
-      new Promise((resolve,reject)=>{
         axios({
           method:'post',
           baseURL:'http://localhost:3000',
-          url: '/user',
+          url: '/login',
           data:{'account':this.account,"password":this.password}
         }).then(res=>{
           console.log(res.data);
-          resolve(res.data)
         }).catch(error=>{
           console.log(error);
-          reject(error)
         })
-      })
     },
     // 取消按钮
     signCancel(){
@@ -60,6 +56,8 @@ export default {
     toRegister(){
       this.$emit('signToRegister')
       this.sign_flag=false
+      this.account=''
+      this.password=''
     }
   },
 };

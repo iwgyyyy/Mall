@@ -9,6 +9,7 @@
       </Signin>
       <!-- 注册按钮 -->
       <Registeruser
+      @cancelRegister='cancelRegisterShowSign'
       @registerToSign="showSignForm"
       ref='register'>
       </Registeruser>
@@ -34,6 +35,10 @@ export default {
     // 登录界面的取消按钮
     cancel(){
       this.change=false
+    },
+    cancelRegisterShowSign(){
+      this.cancel()
+      this.showSignForm()
     },
     // 切换登录和注册界面
     showRegisterForm(){
