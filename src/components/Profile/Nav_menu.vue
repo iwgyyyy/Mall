@@ -94,6 +94,7 @@ export default {
     signOut(){
       if(confirm('您确定要退出吗')){
         this.$store.commit('changeStatetoTrue')
+        this.$store.commit('clearAccount')
          ElMessage.success({
           message:'退出成功',
           type:'success'

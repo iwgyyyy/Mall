@@ -2,7 +2,8 @@ import { createStore } from 'vuex'
 
 export default createStore({
   state: {
-    sign_state:true
+    sign_state:true,
+    account:''
   },
   mutations: {
     changeStatetoFalse(state){
@@ -10,6 +11,12 @@ export default createStore({
     },
     changeStatetoTrue(state){
       state.sign_state=true
+    },
+    saveAccount(state,account){
+      state.account=account
+    },
+    clearAccount(state){
+      state.account=''
     }
   },
   actions: {
