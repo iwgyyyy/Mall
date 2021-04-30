@@ -2,12 +2,11 @@
   <div>
     <el-tabs>
       <!-- 搜索数据库中的每一个种类的前几条数据存入一个数组内部 再用v-for遍历显示 -->
-      <el-tab-pane v-for="item in pets_name" :label="item" :key='item'>
+      <el-tab-pane v-for="i in pets_name" :label="i" :key='i'>
           <Show-pets-card 
-          v-for="(item,index) in test_pet_list" 
+          v-for="(item,index) in pet_list" 
           :key='index' 
-          :pet='item' 
-          :testId='index'>
+          :pet='item'>
           </Show-pets-card>
       </el-tab-pane>
     </el-tabs>
@@ -16,48 +15,33 @@
 
 <script>
 import ShowPetsCard from './Showpets_card'
+import axios from 'axios'
 export default {
   name: "Showpets_mall",
-  created() {},
+  created() {
+    // 获得所有宠物类型
+    axios({
+      method:'post',
+      baseURL:"http://localhost:3000",
+      url: "/getPets",
+    }).then(res=>{
+      res.data.forEach(value=>{
+        if(!this.pets_name.includes(value['subject'])) 
+          this.pets_name.push(value['subject'])
+        value['showPictureAddress']='../..'+value['showPictureAddress']
+        this.pet_list.push(value)
+      })
+    }).catch(err=>{
+      console.log(err);
+    })
+
+  },
   data() {
     return {
       // 宠物种类，后续需从数据库读取
-      pets_name:['全部种类','狗狗','猫','仓鼠','兔子'],
+      pets_name:['全部种类'],
       // 测试宠物数据
-      test_pet_list:[
-        {
-        type:'狗狗',
-        family:'哈士奇',
-        sexy:'公',
-        age:'1岁',
-        img_route:require('../../assets/images/dog-hashiqi1.png'),
-        svg_route:require('../../assets/svg/pets-dog1.svg')
-        },
-        {
-        type:'猫',
-        family:'折耳',
-        sexy:'母',
-        age:'6个月',
-        img_route:require('../../assets/images/dog-hashiqi1.png'),
-        svg_route:require('../../assets/svg/pets-dog1.svg')
-        },
-        {
-        type:'仓鼠',
-        family:'坎贝尔',
-        sexy:'公',
-        age:'1岁',
-        img_route:require('../../assets/images/dog-hashiqi1.png'),
-        svg_route:require('../../assets/svg/pets-dog1.svg')
-        },
-        {
-        type:'兔子',
-        family:'垂耳',
-        sexy:'公',
-        age:'2岁',
-        img_route:require('../../assets/images/dog-hashiqi1.png'),
-        svg_route:require('../../assets/svg/pets-dog1.svg')
-        }]
-      
+      pet_list:[]
     };
   },
   props: {},

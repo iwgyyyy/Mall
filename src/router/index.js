@@ -52,7 +52,7 @@ const routes = [
     children:profile_child
   },
   {
-    path:'/goods_details/:goodsId',
+    path:'/goods_details',
     component:()=>import('../views/Mall/Goods_details.vue')
   },
   {
