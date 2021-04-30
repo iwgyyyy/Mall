@@ -28,9 +28,8 @@ export default {
       res.data.forEach(value=>{
         if(!this.pets_name.includes(value['subject'])) 
           this.pets_name.push(value['subject'])
-        value['showPictureAddress']='../..'+value['showPictureAddress']
-        this.pet_list.push(value)
       })
+      this.pet_list=res.data
     }).catch(err=>{
       console.log(err);
     })

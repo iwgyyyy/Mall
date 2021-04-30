@@ -25,9 +25,13 @@
 <script>
 export default {
   name: "Showpets_card",
-  created() {},
+  created() {
+
+  },
   data() {
-    return {};
+    return {
+
+    };
   },
   props: {
     pet:{
