@@ -3,7 +3,7 @@
   <div class="pets_card">
     <!-- 卡片展示图片 -->
     <div class='pets_picture'>
-      <img :src="pet.showPictureAddress" alt="#">
+      <img :src="require('D:/Project/thpetsmall/public/goodsImages/'+pet.showPictureAddress)" alt="#">
     </div>
     <!-- 卡片展示文字介绍等 -->
     <div class='pets_words'>
@@ -15,7 +15,7 @@
       </div>
       <!-- 隐藏的链接 -->
       <div class="hidden-route">
-        <router-link :to="'/goods_details/'">了解详情</router-link>
+        <router-link :to="routePet">了解详情</router-link>
         <router-link to="">查看全部</router-link>
       </div>
     </div>
@@ -25,12 +25,10 @@
 <script>
 export default {
   name: "Showpets_card",
-  created() {
-
-  },
+  created() {},
   data() {
     return {
-
+      
     };
   },
   props: {
@@ -39,6 +37,15 @@ export default {
     },
   },
   methods: {},
+  computed:{
+    routePet(){
+      let route={
+        path:'/goods_details',
+        query:this.pet
+      }
+      return route
+    }
+  }
 };
 </script>
 

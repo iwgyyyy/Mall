@@ -1,17 +1,17 @@
 <template>
-  <div class="goods_card">
+  <div class="goods_card" >
     <div class="goods_picture">
-      <img src="../../assets/svg/medicine.svg" alt="#">
+      <img :src="require('D:/Project/thpetsmall/public/goodsImages/'+goods.showPictureAddress)" alt="#">
       <div class="goods_words">
         <article>
-          这是一段介绍商品的文字。。。。lalalalalala
+          {{goods.decscription}}
         </article>
       </div>
     </div>
     <div class="goods_message">
-      <p>物品名称</p>
-      <p>售价</p>
-      <router-link to="">了解详情</router-link>
+      <p>{{goods.selfClass}}</p>
+      <p>{{goods.price}}￥</p>
+      <router-link :to="petsGoodsDetails">了解详情</router-link>
     </div>
   </div>
 </template>
@@ -27,6 +27,15 @@ export default {
     goods:Object//内部有介绍或使用的属性，物品名称属性，售价，还有商品图片地址
   },
   methods: {},
+  computed:{
+    petsGoodsDetails(){
+      let route={
+        path:'/goods_details',
+        query:this.goods
+      }
+      return route
+    }
+  }
 };
 </script>
 
@@ -55,8 +64,8 @@ export default {
 }
 /* 图片 */
 .goods_picture img{
-  width: 150px;
-  height: 130px;
+  width: 100%;
+  height: 100%;
   transform: translateX(50%);
   transition-duration: 500ms;
 }
@@ -65,6 +74,7 @@ export default {
   width: 150px;
   transform: translateX(100%);
   transition-duration: 500ms;
+  overflow:hidden;
 }
 /* 物品信息 即下面的div */
 .goods_message{

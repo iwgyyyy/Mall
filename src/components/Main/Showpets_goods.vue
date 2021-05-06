@@ -1,12 +1,12 @@
 <template>
   <div>
-    <el-tabs tab-position="left">
+    <el-tabs tab-position="left" @tab-click="handleTabClick">
     <el-tab-pane v-for="item in kind_of_goods" :label="item" :key='item'>
-      <Show-goods-card></Show-goods-card>
-      <Show-goods-card></Show-goods-card>
-      <Show-goods-card></Show-goods-card>
-      <Show-goods-card></Show-goods-card>
-      <Show-goods-card></Show-goods-card>
+      <Show-goods-card
+      v-for="(item,index) in petsGoods"
+      :goods="item"
+      :key="index"
+      ></Show-goods-card>
     </el-tab-pane>
   </el-tabs>
   </div>
@@ -14,16 +14,51 @@
 
 <script>
 import ShowGoodsCard from './Showgoods_card'
+import axios from 'axios'
 export default {
   name: "Showpets_goods",
-  created() {},
+  created() {
+    axios({
+      method:'post',
+      baseURL:"http://localhost:3000",
+      url: '/getPetsGoods',
+    }).then(res=>{
+      res.data.forEach(value=>{
+        if(!this.kind_of_goods.includes(value['subject'])) 
+          this.kind_of_goods.push(value['subject'])
+      })
+      this.petsGoods=res.data
+    }).catch(err=>{
+      console.log(err);
+    })
+  },
   data() {
     return {
-      kind_of_goods:['医用品','穿搭','食物','玩具','其他']
+      // 宠物用品类型
+      kind_of_goods:['全部'],
+      // 宠物用品数据
+      petsGoods:[]
     };
   },
   props: {},
-  methods: {},
+  methods: {
+    // 点击标签获得数据
+    handleTabClick(e){
+      const subject=e.props.label
+      axios({
+        method:'post',
+        baseURL:'http://localhost:3000',
+        url: "/getPetsGoods",
+        data: {
+          subject
+        }
+      }).then(res=>{
+        this.petsGoods=res.data
+      }).catch(err=>{
+        console.log(err);
+      })
+    },
+  },
   components:{
     ShowGoodsCard
   }

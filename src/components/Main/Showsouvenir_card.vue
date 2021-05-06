@@ -1,12 +1,12 @@
 <template>
   <div class="souvenir_card">
     <div class="souvenir_message">
-      <p>物品名称</p>
-      <p>售价</p>
-      <router-link to="">了解详情</router-link>
+      <p>{{souvenir.selfClass}}</p>
+      <p>{{souvenir.price}}￥</p>
+      <router-link :to="souvenirDetails">了解详情</router-link>
     </div>
     <div class="souvenir_picture">
-      <img src="../../assets/svg/souvenir_clothes.svg" alt="#">
+      <img :src="require('D:/Project/thpetsmall/public/goodsImages/'+souvenir.showPictureAddress)" alt="#">
     </div>
     <div v-show='flag' class="souvenir_button">
       <button style="background:gold;color:black">
@@ -37,6 +37,14 @@ export default {
     souvenir:Object,//传入图片地址 商品名称 售价
   },
   methods: {},
+  computed:{
+    souvenirDetails(){
+      return {
+        path:"/goods_details",
+        query:this.souvenir
+      }
+    }
+  }
 };
 </script>
 

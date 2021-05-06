@@ -1,8 +1,8 @@
 <template>
   <div>
-    <el-tabs>
+    <el-tabs @tab-click="handleTabClick">
       <!-- 搜索数据库中的每一个种类的前几条数据存入一个数组内部 再用v-for遍历显示 -->
-      <el-tab-pane v-for="i in pets_name" :label="i" :key='i'>
+      <el-tab-pane v-for="i in pets_name" :label="i" :key='i' >
           <Show-pets-card 
           v-for="(item,index) in pet_list" 
           :key='index' 
@@ -37,14 +37,31 @@ export default {
   },
   data() {
     return {
-      // 宠物种类，后续需从数据库读取
+      // 宠物种类，从数据库读取
       pets_name:['全部种类'],
-      // 测试宠物数据
+      // 宠物数据
       pet_list:[]
     };
   },
   props: {},
-  methods: {},
+  methods: {
+    // 点击标签获得数据
+    handleTabClick(e){
+      const subject=e.props.label
+      axios({
+        method:'post',
+        baseURL:'http://localhost:3000',
+        url: "/getPets",
+        data: {
+          subject
+        }
+      }).then(res=>{
+        this.pet_list=res.data
+      }).catch(err=>{
+        console.log(err);
+      })
+    },
+  },
   components:{
     ShowPetsCard
   }

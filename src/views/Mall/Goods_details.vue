@@ -3,14 +3,15 @@
     <!-- 左边图片 -->
     <div class="goods-details-imagearea">
       <div class="goods-details-imagearea-bigimg">
-        <img src="../../assets/images/pets/dragon.png" alt="#" id='bigimage'>
+        <img :src="require('D:/Project/thpetsmall/public/goodsImages/'+goods.showPictureAddress)" alt="#" id='bigimage'>
       </div>
       <div class="goods-details-imagearea-smallimg flex-center">
-          <img :src="test_1" alt="#" @mouseenter="changeImg">
-          <img :src="test_2" alt="#" @mouseenter="changeImg">
-          <img :src="test_3" alt="#" @mouseenter="changeImg">
-          <img :src="test_4" alt="#" @mouseenter="changeImg">
-          <img :src="test_5" alt="#" @mouseenter="changeImg">
+          <img 
+          v-for="(item,index) in goods.detailPictureAddress"
+          :src="require('D:/Project/thpetsmall/public/goodsImages/'+item)" 
+          alt="#" 
+          :key="index"
+          @mouseenter="changeImg">
       </div>
     </div>
 
@@ -18,15 +19,15 @@
     <div class="goods-details-textarea">
       <!-- 商品名称 -->
       <div class="goods-details-textarea-name">
-        <p>九阳破壁豆浆机</p>
+        <p>{{goods.name}}</p>
       </div>
       <!-- 商品介绍 -->
       <div class="goods-details-textarea-intro">
+        <p v-if="goods.selfType=='宠物'">{{goods.sex+'    '}}{{goods.age}}</p>
+        <p v-else-if="goods.selfType=='宠物用品'">{{goods.notice}}</p>
+        <p v-else>{{goods.material}}</p>
         <article>
-          京东平台卖家销售并发货的商品，由平台卖家提供发票和相应的售后服务。请您放心购买！
-          注：因厂家会在没有任何提前通知的情况下更改产品包装、产地或者一些附件，
-          本司不能确保客户收到的货物与商城图片、产地、附件说明完全一致。
-          只能确保为原厂正货！并且保证与当时市场上同样主流新品一致。若本商城没有及时更新，请大家谅解！
+          {{goods.decscription}}
         </article>
       </div>
       <!-- 数量以及小计价格 -->
@@ -34,12 +35,12 @@
         <span style="margin:6% 2% auto 5%">数量:</span>
         <!-- 最小值是测试的url中的地址栏传过来的参数 后续需要修改 -->
         <el-input-number 
-        :min="parseInt(this.$route.params.goodsId)"  
+        :min="1"  
         label="购买数量" 
         v-model="count" 
         style="margin:6% 10% auto 1%">
         </el-input-number>
-        <span>小计:<b>1000</b></span>
+        <span>小计:<b>{{totalPrice}}</b></span>
       </div>
       <!-- 加入购物车或购买按钮 -->
       <div class="goods-details-textarea-button">
@@ -54,18 +55,20 @@
 <script>
 export default {
   name: "GoodsDetails",
-  created() {},
+  created() {
+    this.goods=this.$route.query
+  },
   data() {
     return {
-      count:0,
-      test_1:require("../../assets/images/pets/dragon.png"),
-      test_2:require("../../assets/images/pets/cattle.png"),
-      test_3:require("../../assets/images/pets/sheep.png"),
-      test_4:require("../../assets/images/pets/tiger.png"),
-      test_5:require("../../assets/images/pets/horse.png"),
+      count:1,
+      goods:null
     };
   },
-  computed:{},
+  computed:{
+    totalPrice(){
+      return this.goods.price*this.count
+    }
+  },
   props: {},
   methods: {
     changeImg(e){
@@ -103,8 +106,8 @@ export default {
   border-bottom: 1px solid rgba(0,0,0,0.1);
 }
 .goods-details-imagearea-bigimg img{
-  width: 520px;
-  height: 520px;
+  width: 100%;
+  height: 100%;
 }
 /* 小图区域 */
 .goods-details-imagearea-smallimg{
@@ -129,6 +132,7 @@ export default {
   font-size: 36px;
   box-sizing: border-box;
   display: flex;
+  justify-content: center;
   align-items: center;
 }
 .goods-details-textarea-name p{
@@ -139,6 +143,7 @@ export default {
 .goods-details-textarea-intro{
   width: 90%;
   height: 40%;
+  padding-left: 40px;
   text-align:justify;
   letter-spacing: 3px;
   box-sizing: border-box;
