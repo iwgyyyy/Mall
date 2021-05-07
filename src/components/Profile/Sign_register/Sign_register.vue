@@ -72,7 +72,8 @@ export default {
   height: 40%;
   transform: translate(-50%,-50%);
   border-radius: 25px;
-  background:linear-gradient(to right,rgb(255, 172, 172),rgb(109, 255, 109));
+  background-image: url('../../../assets/images/signBackground.jpg');
+  background-size: 100% 100%;
 }
 
 .sr-div-child a{
