@@ -1,6 +1,6 @@
 <template>
   <div class="personal-message">
-    <Personal-message-form @showForm='showPasswordForm' ref='personalMessage'></Personal-message-form>
+    <Personal-message-form @showForm='showPasswordForm'></Personal-message-form>
   </div>
   <transition>
     <div v-show='passwordFormFlag' class="personal-message-changepassword">
@@ -28,7 +28,6 @@ export default {
     },
     cancelPasswordForm(){
       this.passwordFormFlag=false
-      // this.$refs.personalMessage.check=false 验证成功后才能将其取消
     }
   },
   components:{

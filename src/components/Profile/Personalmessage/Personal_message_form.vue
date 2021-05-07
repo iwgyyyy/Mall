@@ -21,11 +21,6 @@
       <img src="../../../assets/svg/personal_message/realname.svg" alt="#">
       <input type="text" placeholder="请输入真实姓名" v-model="realname">
     </div>
-    <!-- 密码 -->
-    <div class="personal-message-form-control">
-      <img src="../../../assets/svg/personal_message/password.svg" alt="#">
-      <input type="password"  v-model="password" :disabled='check' placeholder="*********">
-    </div>
     <!-- 性别 -->
     <div class="personal-message-form-control">
       <img src="../../../assets/svg/personal_message/sex.svg" alt="#">
@@ -35,16 +30,36 @@
     </div>
     <!-- 按钮 -->
     <div>
-      <el-button type="primary">保存</el-button>
+      <el-button type="primary" @click="keepPersonalMessage">保存</el-button>
       <el-button type="warning" @click="changePassword">修改密码</el-button>
     </div>
   </div>
 </template>
 
 <script>
+import axios from 'axios'
+import { ElMessage } from 'element-plus';
 export default {
   name: "PersonalMessageForm",
-  created() {},
+  created() {
+    axios({
+      method:'post',
+      baseURL:'http://localhost:3000',
+      url: '/getPersonalMessage',
+      data: {
+        account:this.$store.state.account
+      }
+    }).then(res=>{
+      const personalMssage=res.data
+      this.nickname=personalMssage.nickname?personalMssage.nickname:''
+      this.email=personalMssage.email?personalMssage.email:''
+      this.phonenumber=personalMssage.phonenumber?personalMssage.phonenumber:''
+      this.realname=personalMssage.realname?personalMssage.realname:''
+      this.sex=personalMssage.sex?personalMssage.sex:'男'
+    }).catch(err=>{
+      console.log(err);
+    })
+  },
   data() {
     return {
       check:true,
@@ -60,7 +75,48 @@ export default {
   methods: {
     changePassword(){
       this.$emit('showForm')
-    }
+    },
+    // 检查个人信息
+    checkMessage(){
+      if(this.email==''&&this.phonenumber=='') return true
+      const email_reg=/^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/
+      const phone_reg=/^[1][3,5,7,8,9][0-9]{9}$/
+      if(!email_reg.test(this.email)){
+        ElMessage.warning('邮箱格式错误')
+        return false
+      }
+      if(!phone_reg.test(this.phonenumber)){
+        ElMessage.warning('手机格式错误')
+        return false
+      }
+      return true
+    },
+    // 保存个人信息
+    keepPersonalMessage(){
+      if(this.checkMessage()){
+        axios({
+          method:'post',
+          baseURL:'http://localhost:3000',
+          url: '/keepPersonalMessage',
+          data: {
+            account:this.$store.state.account,
+            email:this.email,
+            phonenumber:this.phonenumber,
+            sex:this.sex,
+            nickname:this.nickname,
+            realname:this.realname
+          }
+        }).then(res=>{
+          if(res.status==200){
+            ElMessage.success('修改成功！')
+          }else if(res.status==500){
+            ElMessage.error('修改失败。。')
+          }
+        }).catch(err=>{
+          console.log(err);
+        })
+      }
+    },
   },
 };
 </script>
@@ -77,6 +133,7 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: space-evenly;
 }
 .personal-message-form-control{
   width: 350px;

@@ -16,7 +16,7 @@
       <!-- 隐藏的链接 -->
       <div class="hidden-route">
         <router-link :to="routePet">了解详情</router-link>
-        <router-link to="">查看全部</router-link>
+        <router-link to="/mall">查看全部</router-link>
       </div>
     </div>
   </div>

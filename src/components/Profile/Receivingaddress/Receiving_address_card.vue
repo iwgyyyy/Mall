@@ -5,14 +5,19 @@
     <!-- 文字显示 -->
     <div class="Receiving-address-card-text">
       <div style="margin-left:5%">
-        <span style="margin-right:5%">收货人:<b>{{personAddress.name}}</b></span>
-        <span>手机:<b>{{personAddress.phone}}</b></span>
+        <span style="margin-right:5%">收货人:<b>{{address.consigneeName}}</b></span>
+        <span>手机:<b>{{address.consigneeNumber}}</b></span>
       </div>
       <div style="margin-left:5%">
-        <span>所在地区:<b>{{personAddress.selflocation}}</b></span>
+        <span>
+          所在地区:
+          <b>
+            {{address.selfAddress[0]}} {{address.selfAddress[1]}} {{address.selfAddress[2]}}
+          </b>
+        </span>
       </div>
       <div style="margin-left:5%">
-        <span>详细地址:<b>{{personAddress.address}}</b></span>
+        <span>详细地址:<b>{{address.selfLocation}}</b></span>
       </div>
     </div>
     <!-- 操作按钮 -->
@@ -21,13 +26,15 @@
         <el-button type="primary" icon="el-icon-edit" circle @click="rewrite"></el-button>
       </div>
       <div>
-        <el-button type="danger" icon="el-icon-delete" circle></el-button>
+        <el-button type="danger" icon="el-icon-delete" circle @click="deleteAddress"></el-button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import axios from 'axios'
+import { ElMessage } from 'element-plus';
 export default {
   name: "ReceivingAddressCard",
   created() {},
@@ -35,14 +42,8 @@ export default {
     return {};
   },
   props: {
-    personAddress:{
-      type:Object,
-      default:{
-        name:'刘旺子',
-        selflocation:'湖北省-武汉市-东湖区',
-        address:'光华软件中心',
-        phone:'138****0438',
-      }
+    address:{
+      type:Object
     },
     // 若用在订单详情页面，则需传入order_flag，不展示按钮
     order_flag:{
@@ -52,7 +53,26 @@ export default {
   },
   methods: {
     rewrite(){
-      this.$emit('changeForm',this.personAddress)
+      this.$emit('changeForm',this.address)
+    },
+    deleteAddress(){
+      if(confirm('您确定要删除该地址吗')){
+        axios({
+          method:'post',
+          baseURL:"http://localhost:3000",
+          url: "/deleteAddress",
+          data: {
+            id:this.address['_id']
+          }
+        }).then(res=>{
+          if(res.status==200){
+            this.$emit('flushAddress')
+            ElMessage.success('删除成功！')
+          }
+        }).catch(err=>{
+          console.log(err);
+        })
+      }
     }
   },
 };

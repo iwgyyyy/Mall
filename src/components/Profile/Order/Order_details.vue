@@ -19,7 +19,7 @@
     <!-- 收货地址 -->
     <div class="order-details-address">
       <div class="order-details-address-main">
-        <Receiving-address-card :order_flag='showAddress'></Receiving-address-card>
+
       </div>
       <!-- 按钮 -->
       <div class="order-details-address-button flex-y-center">

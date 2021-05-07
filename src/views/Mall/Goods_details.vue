@@ -44,8 +44,8 @@
       </div>
       <!-- 加入购物车或购买按钮 -->
       <div class="goods-details-textarea-button">
-        <el-button type="primary" style="margin-right:10%">加入购物车</el-button>
-        <el-button type="warning" style="margin-right:10%">购买</el-button>
+        <el-button type="primary" style="margin-right:10%" @click="addToShoppingCart">加入购物车</el-button>
+        <el-button type="warning" style="margin-right:10%" @click="buy">购买</el-button>
         <el-button type="info" @click="back">返回</el-button>
       </div>
     </div>
@@ -53,6 +53,7 @@
 </template>
 
 <script>
+import {ElMessage} from 'element-plus'
 export default {
   name: "GoodsDetails",
   created() {
@@ -77,6 +78,22 @@ export default {
     // 返回
     back(){
       history.back(-1)
+    },
+    // 添加至购物车
+    addToShoppingCart(){
+      if(!this.$store.state.account){
+        ElMessage.warning('请先登录')
+      }else{
+        ElMessage.error('尚未完成该功能')
+      }
+    },
+    // 购买
+    buy(){
+      if(!this.$store.state.account){
+        ElMessage.warning('请先登录')
+      }else{
+        ElMessage.error('尚未完成该功能')
+      }
     }
   },
 };
