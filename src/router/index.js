@@ -75,8 +75,10 @@ router.beforeEach((to, from, next) => {
     //不用修改to.fullPath的路径，next函数就表示下一个路径，如果不想使用to的原本路径，
     //可直接在next中传入一个对象，该对象内部的path属性即改变路由的地址且实时刷新
     next({path:'/main'})
+  }else if(to.fullPath.startsWith('/order_details')&&store.state.sign_state){
+    next({path:'/main'})//若不想修改to的原本路径 就直接调用next 不传入参数，表示按照原来to的路径访问
   }else{
-    next()//若不想修改to的原本路径 就直接调用next 不传入参数，表示按照原来to的路径访问
+    next()
   }
   
   

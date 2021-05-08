@@ -4,21 +4,51 @@
     <!-- 订单头字段 -->
     <Order-card-title></Order-card-title>
     <!-- 订单 -->
-    <div class="order-show">
-      <Order-card orderType='2'></Order-card>
-      <Order-card orderType='2'></Order-card>
+    <div class="order-show" v-show="!isEmpty" v-loading="order_list.length===0">
+      <Order-card
+      v-for="item in order_list"
+      :key="item['_id']"
+      :order="item"
+      orderType='2'>
+      </Order-card>
     </div>
+    <el-empty
+    class="order-show"
+    description="暂时没有待支付的订单。。" 
+    v-show="isEmpty">
+    </el-empty>
   </div>
 </template>
 
 <script>
+import axios from 'axios'
 import OrderCardTitle from './Order_card_title'
 import OrderCard from './Order_card'
 export default {
   name: "Order2",
-  created() {},
+  created() {
+    axios({
+      method:'post',
+      baseURL:'http://localhost:3000',
+      url: '/getWaitForPaidOrder',
+      data: {
+        account:this.$store.state.account
+      }
+    }).then(res=>{
+      this.order_list=res.data
+      if(this.order_list.length===0){
+        this.isEmpty=true
+      }
+    }).catch(err=>{
+      console.log(err);
+    })
+  },
   data() {
-    return {};
+    return {
+      // 未支付的订单
+      order_list:[],
+      isEmpty:false
+    };
   },
   props: {},
   methods: {},

@@ -5,15 +5,17 @@
       <!-- 商品头部 -->
       <div class="order-goodslist-title">
         <span>商品列表</span>
+        <span>订单号:{{orderId}}</span>
         <span style="color:red">总计:<b>{{totalPrice}}￥</b></span>
       </div>
       <!-- 商品主体 -->
       <div class="order-goodslist-main">
-        <Shopping-cart-card :order_flag="showAddress"></Shopping-cart-card>
-        <Shopping-cart-card :order_flag="showAddress"></Shopping-cart-card>
-        <Shopping-cart-card :order_flag="showAddress"></Shopping-cart-card>
-        <Shopping-cart-card :order_flag="showAddress"></Shopping-cart-card>
-        <Shopping-cart-card :order_flag="showAddress"></Shopping-cart-card>
+        <Shopping-cart-card
+        v-for="item in goodsList"
+        :goods="item"
+        :key="item['_id']"
+        :order_flag="false"
+        ></Shopping-cart-card>
       </div>
     </div>
     <!-- 收货地址 -->
@@ -27,7 +29,7 @@
           <el-button type="primary">使用收货地址</el-button>
         </div>
         <div>
-          <el-button type="success" @click="showAddressForm=true">新增收货地址</el-button>
+          <el-button type="success">新增收货地址</el-button>
         </div>
       </div>
       <div class="order-details-address-button flex-y-center">
@@ -42,22 +44,26 @@
   </div>
   <!-- 新增收货地址 -->
   <div v-show="showAddressForm" class="order-details-address-form">
-    <Receiving-address-form @cancelAddressForm="showAddressForm=false"></Receiving-address-form>
+
   </div>
 </template>
 
 <script>
 import ShoppingCartCard from '../Shoppingcart/Shopping_cart_card'
-import ReceivingAddressCard from '../Receivingaddress/Receiving_address_card'
-import ReceivingAddressForm from '../Receivingaddress/Receiving_address_form'
 export default {
   name: "OrderDetails",
-  created() {},
+  created() {
+    this.goodsList=this.$route.query.goodsList.map(value=>{
+      return JSON.parse(value)
+    })
+    this.orderId=this.$route.query.orderId
+  },
   data() {
     return {
       showAddress:false,
       showAddressForm:false,
-      totalPrice:0,
+      goodsList:[],
+      orderId:'',
     };
   },
   props: {},
@@ -66,10 +72,17 @@ export default {
       history.go(-1)
     }
   },
+  computed:{
+    totalPrice(){
+      let count=0
+      this.goodsList.forEach(value=>{
+        count+=value.price*value.numbers
+      })
+      return count
+    }
+  },
   components:{
     ShoppingCartCard,
-    ReceivingAddressCard,
-    ReceivingAddressForm
   }
 };
 </script>

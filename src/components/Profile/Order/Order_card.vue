@@ -4,11 +4,11 @@
     <div class="order-card-title">
       <!-- 创建时间 -->
       <div style="margin:0 20% 0 5%">
-        <span>{{timeType}}<b>2020-01-01</b></span>
+        <span>{{timeType}}<b>{{order.createTime}}</b></span>
       </div>
       <!-- 订单号 -->
       <div>
-        <span>订单号:<b>35632532</b></span>
+        <span>订单号:<b>{{order['_id']}}</b></span>
       </div>
     </div>
 
@@ -17,9 +17,7 @@
 
       <!-- 商品 -->
       <div class="order-card-goods">
-        <div style="width:20%" v-for="item in [1,2,3,4,5,6,7]" :key=item>
-          <router-link to="">哈士奇</router-link>
-        </div>
+        
       </div>
 
       <!-- 订单状态 -->
@@ -28,7 +26,7 @@
       </div>
 
       <!-- 收货信息 -->
-      <div class="order-card-receive-message">
+      <div class="order-card-receive-message" v-if="order.receiveMessage.length!==0">
         <div style="margin-left:5%">
           <span style="margin-right:5%">收货人:<b>刘旺子</b></span>
           <span>手机:<b>13838380438</b></span>
@@ -40,10 +38,17 @@
           <span>详细地址:<b>软件光华小区</b></span>
         </div>
       </div>
+      <div class="order-card-receive-message" v-else>
+        <img 
+        src="../../../assets/svg/mall/empty.svg" 
+        style="width:100%;height:100%"
+        alt="暂时没有填写地址...">
+      </div>
+      
 
       <!-- 订单价格 -->
       <div class="order-card-price">
-        <p>10000￥</p>
+        <p>{{order.totalPrice}}￥</p>
       </div>
       
       <!-- 操作按钮 -->
@@ -79,9 +84,14 @@ export default {
     return {};
   },
   props: {
+    // 确定是哪种订单
     orderType:{
       type:String,
       default:'1',
+    },
+    // 接收的订单
+    order:{
+      type:Object
     }
   },
   computed:{
@@ -133,6 +143,7 @@ export default {
   flex-wrap: wrap;
   align-items: center;
   border-right: 1px solid #DCDFE6;
+  overflow-y: scroll;
 }
 .order-card-goods a{
   text-decoration: none;

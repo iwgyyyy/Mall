@@ -6,9 +6,7 @@
     :key="index"
     ></Mall-card>
   </div>
-  <div class="fill mall-body mall-body-empty" v-show="isGoodsEmpty">
-
-  </div>
+  <el-empty description="没有找到商品。。" v-show="isGoodsEmpty"></el-empty>
 </template>
 
 <script>

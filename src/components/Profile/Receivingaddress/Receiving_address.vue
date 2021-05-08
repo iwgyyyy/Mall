@@ -11,9 +11,10 @@
       :order_flag="true">
       </Receiving-address-card>
     </div>
-    <div class="show-receiving-address" v-show="isEmpty">
-      <img src="../../../assets/svg/mall/empty.svg" style="width:100%;height:90%">
-    </div>
+    <el-empty 
+    class="show-receiving-address"
+    description="没有收货地址。。请填写" 
+    v-show="isEmpty"></el-empty>
     <!-- 填充或修改地址表单 -->
     <transition name="el-zoom-in-top">
       <div class="fill-receiving-address" v-show="filladdress">

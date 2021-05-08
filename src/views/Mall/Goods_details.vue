@@ -53,6 +53,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import {ElMessage} from 'element-plus'
 export default {
   name: "GoodsDetails",
@@ -84,7 +85,27 @@ export default {
       if(!this.$store.state.account){
         ElMessage.warning('请先登录')
       }else{
-        ElMessage.error('尚未完成该功能')
+        axios({
+          method:'post',
+          baseURL:'http://localhost:3000',
+          url: '/addToShoppingCart',
+          data: {
+            account:this.$store.state.account,
+            goodsId:this.goods['_id'],
+            price:this.goods.price,
+            name:this.goods.selfClass,
+            showPictureAddress:this.goods.showPictureAddress,
+            numbers:this.count
+          }
+        }).then(res=>{
+          if(res.status==200){
+            ElMessage.success('添加成功！')
+          }else{
+            ElMessage.error('添加失败..')
+          }
+        }).catch(err=>{
+          console.log(err);
+        })
       }
     },
     // 购买

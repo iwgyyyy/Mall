@@ -18,6 +18,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import { ElMessage } from 'element-plus'
 export default {
   name: "Mall_card",
@@ -31,13 +32,34 @@ export default {
     }
   },
   methods: {
+    // 添加至购物车 数量默认为1
     addToShoppingCart(){
       if(!this.$store.state.account){
         ElMessage.warning('请先登录')
       }else{
-        ElMessage.success('加入成功！')
+        axios({
+          method:'post',
+          baseURL:'http://localhost:3000',
+          url: '/addToShoppingCart',
+          data: {
+            account:this.$store.state.account,
+            goodsId:this.goods['_id'],
+            price:this.goods.price,
+            name:this.goods.selfClass,
+            showPictureAddress:this.goods.showPictureAddress
+          }
+        }).then(res=>{
+          if(res.status==200){
+            ElMessage.success('添加成功！')
+          }else{
+            ElMessage.error('添加失败..')
+          }
+        }).catch(err=>{
+          console.log(err);
+        })
       }
     },
+    // 跳转至商品详情页
     goToGoodsDetails(){
       this.$router.push({
         path:'/goods_details',
