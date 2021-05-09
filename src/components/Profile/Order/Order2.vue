@@ -9,7 +9,7 @@
       v-for="item in order_list"
       :key="item['_id']"
       :order="item"
-      orderType='2'>
+      @updateOrder="getAllWaitForPaidOrder">
       </Order-card>
     </div>
     <el-empty
@@ -27,21 +27,7 @@ import OrderCard from './Order_card'
 export default {
   name: "Order2",
   created() {
-    axios({
-      method:'post',
-      baseURL:'http://localhost:3000',
-      url: '/getWaitForPaidOrder',
-      data: {
-        account:this.$store.state.account
-      }
-    }).then(res=>{
-      this.order_list=res.data
-      if(this.order_list.length===0){
-        this.isEmpty=true
-      }
-    }).catch(err=>{
-      console.log(err);
-    })
+    this.getAllWaitForPaidOrder()
   },
   data() {
     return {
@@ -51,7 +37,26 @@ export default {
     };
   },
   props: {},
-  methods: {},
+  methods: {
+    // 获得所有的未支付订单
+    getAllWaitForPaidOrder(){
+      axios({
+        method:'post',
+        baseURL:'http://localhost:3000',
+        url: '/getWaitForPaidOrder',
+        data: {
+          account:this.$store.state.account
+        }
+      }).then(res=>{
+        this.order_list=res.data
+        if(this.order_list.length===0){
+          this.isEmpty=true
+        }
+      }).catch(err=>{
+        console.log(err);
+      })
+    }
+  },
   components:{
     OrderCard,
     OrderCardTitle

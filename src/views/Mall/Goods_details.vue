@@ -113,7 +113,31 @@ export default {
       if(!this.$store.state.account){
         ElMessage.warning('请先登录')
       }else{
-        ElMessage.error('尚未完成该功能')
+        let goods={}
+        goods.numbers=this.count
+        goods.name=this.goods.selfClass
+        goods.goodsId=this.goods['_id']
+        goods.showPictureAddress=this.goods.showPictureAddress
+        goods.price=this.goods.price
+        axios({
+          method:'post',
+          baseURL:'http://localhost:3000',
+          url: '/generateOneGoodsOrder',
+          data: {
+            numbers:this.count,
+            account:this.$store.state.account,
+            goods
+          }
+        }).then(res=>{
+          if(res.data=='库存数量不足'){
+            this.$message.error('库存数量不足。。。')
+          }else{
+            const goodsList=[JSON.stringify(goods)]
+            this.$router.push({path:'/order_details',query:{goodsList,orderId:res.data}})
+          }
+        }).catch(err=>{
+          console.log(err);
+        })
       }
     }
   },
