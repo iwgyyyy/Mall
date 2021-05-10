@@ -14,7 +14,7 @@
     </div>
     <el-empty
     class="order-show"
-    description="暂时没有待收货的订单。。" 
+    description="暂时没有历史订单。。" 
     v-show="isEmpty">
     </el-empty>
   </div>
